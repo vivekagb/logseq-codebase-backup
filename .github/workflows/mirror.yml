@@ -1,0 +1,17 @@
+name: Mirror logseq/logseq
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Sync every 6 hours
+  workflow_dispatch:        # Allow manual trigger
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone upstream as a mirror
+        run: |
+          git clone --mirror https://github.com/logseq/logseq.git upstream
+          cd upstream
+          git remote set-url --push origin https://github.com/vivekagb/logseq-codebase-backup.git
+          git push --mirror
